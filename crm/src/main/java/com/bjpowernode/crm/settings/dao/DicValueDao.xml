@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bjpowernode.crm.settings.dao.DicValueDao">
+
+    <!--删除字典值-->
+    <delete id="deleteByCodes">
+        delete from tbl_dic_value
+        where typeCode in
+        <foreach collection="array" item="code" open="(" close=")" separator=",">
+            #{code}
+        </foreach>
+
+    </delete>
+    <!--
+                foreach中:
+                collection:传递过来的集合类型 两种取值array数组 list集合
+                item:每一次遍历出来的元素 在foreach中要在${}中写
+                open:拼接的起始符号 close:拼接的结束符号 separator:拼接的分隔符
+                最终拼接的效果:(code1,code2,code3)
+
+    -->
+
+
+    <!--字典值添加-->
+    <insert id="saveValue">
+        insert into tbl_dic_value(id,value,text,orderNo,typeCode)
+        values (#{id},#{value},#{text},#{orderNo},#{typeCode})
+
+    </insert>
+
+
+    <!--字典值修改-->
+    <select id="getValueByCode" resultType="DicValue">
+        select * from tbl_dic_value where value=#{value}
+
+    </select>
+
+
+
+    <!--更新字典值-->
+    <update id="updateValue">
+        update tbl_dic_value set text=#{text},orderNo=#{orderNo},typeCode=#{typeCode} where value=#{value}
+    </update>
+
+
+    <!--字典值查重-->
+    <select id="checkCode2" resultType="int">
+        select count(*) from tbl_dic_value where value=#{code}
+
+    </select>
+
+
+
+    <select id="getDicValueListByCode" resultType="DicValue">
+        select * from tbl_dic_value where typeCode=#{code} order by orderNo
+    </select>
+
+
+
+
+
+
+
+</mapper>

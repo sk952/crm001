@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bjpowernode.crm.workbench.dao.ActivityDao">
+
+    <select id="getActvityListByName" resultType="Activity">
+
+        select
+
+        a.id,
+        a.name,
+        a.startDate,
+        a.endDate,
+        u.name as owner
+
+        from tbl_activity a
+        join tbl_user u
+        on a.owner=u.id
+
+        where a.name like '%' #{name} '%'
+
+    </select>
+
+    <select id="getActivityListByNameAndNotByClueId" resultType="Activity">
+
+        select
+
+        a.id,
+        a.name,
+        a.startDate,
+        a.endDate,
+        u.name as owner
+
+        from tbl_activity a
+        join tbl_user u
+        on a.owner=u.id
+
+        where a.name like '%' #{aname} '%'
+
+              and
+
+              a.id not in (
+
+                select activityId from tbl_clue_activity_relation where clueId=#{clueId}
+
+              )
+
+    </select>
+
+    <select id="getActivityListByClueId" resultType="Activity">
+
+        select
+
+        car.id as id,
+        a.name,
+        a.startDate,
+        a.endDate,
+        u.name as owner
+
+        from tbl_activity a
+        join tbl_user u
+        on a.owner=u.id
+        join tbl_clue_activity_relation car
+        on a.id=car.activityId
+
+        where car.clueId=#{clueId}
+
+    </select>
+
+    <select id="getActivityByIdForOwner" resultType="Activity">
+
+        select
+
+        a.id,
+        u.name as owner,
+        a.name,
+        a.startDate,
+        a.endDate,
+        a.cost,
+        a.description,
+        a.createTime,
+        a.createBy,
+        a.editTime,
+        a.editBy
+
+
+        from tbl_activity a
+        join tbl_user u
+        on a.owner=u.id
+
+        where a.id=#{id}
+
+    </select>
+
+    <!--
+
+        insert into tbl_activity() values(?,?,?...),(?,?,?...),(?,?,?...),(?,?,?...),(?,?,?...)
+
+    -->
+
+    <insert id="saveActivityList">
+
+        insert into tbl_activity(
+
+            id,
+            owner,
+            name,
+            startDate,
+            endDate,
+            cost,
+            description,
+            createTime,
+            createBy
+
+
+        )
+
+        values
+
+        <foreach collection="list" item="a" separator=",">
+
+            (
+
+                #{a.id},
+                #{a.owner},
+                #{a.name},
+                #{a.startDate},
+                #{a.endDate},
+                #{a.cost},
+                #{a.description},
+                #{a.createTime},
+                #{a.createBy}
+
+
+            )
+
+        </foreach>
+
+    </insert>
+
+    <select id="getActivityListByIds" resultType="Activity">
+
+        select * from tbl_activity
+
+        where id in
+
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+
+            #{id}
+
+        </foreach>
+
+    </select>
+
+    <select id="getActivityList" resultType="Activity">
+
+        select * from tbl_activity
+
+    </select>
+
+    <update id="updateActivity">
+
+        update tbl_activity
+
+        set
+
+        owner=#{owner},
+        name=#{name},
+        startDate=#{startDate},
+        endDate=#{endDate},
+        cost=#{cost},
+        description=#{description},
+        editTime=#{editTime},
+        editBy=#{editBy}
+
+        where id=#{id}
+
+
+    </update>
+
+    <select id="getActivityById" resultType="Activity">
+
+        select * from tbl_activity where id=#{id}
+
+    </select>
+
+    <delete id="deleteActivity">
+
+        delete from tbl_activity
+
+        where id in
+
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+
+            #{id}
+
+        </foreach>
+
+    </delete>
+
+    <select id="getActivityTotalByCondition" resultType="int">
+
+        select count(*)
+
+        from tbl_activity a
+        join tbl_user u
+        on a.owner=u.id
+
+        <where>
+
+            <if test="name!=null and name!=''">
+
+                a.name like '%' #{name} '%'
+
+            </if>
+
+            <if test="owner!=null and owner!=''">
+
+                and u.name like '%' #{owner} '%'
+
+            </if>
+
+            <if test="startDate!=null and startDate!=''">
+
+                and a.startDate &gt; #{startDate}
+
+            </if>
+
+            <if test="endDate!=null and endDate!=''">
+
+                and a.endDate &lt; #{endDate}
+
+            </if>
+
+        </where>
+
+    </select>
+
+    <select id="getActivityListByCondition" resultType="Activity">
+
+        select
+
+        a.id,
+        a.name,
+        u.name as owner,
+        a.startDate,
+        a.endDate
+
+        from tbl_activity a
+        join tbl_user u
+        on a.owner=u.id
+
+        <!--
+
+            使用动态sql做条件查询
+
+            where标签必须要结合if标签来使用
+
+            如果if标签中进行的判断有返回true的操作，则展现查询条件，并展现where关键字
+            如果所有的if判断返回的都是false，则没有查询条件，不展现where关键字
+
+            if中的判断条件来自于map中的key
+
+            关于mybatis中的条件查询
+            必须使用 '%'空格#{取值}空格'%'来进行操作
+            这是一种最优的方案，不推荐使用其他方式
+
+            Statement 对值进行拼接 无法防止sql的恶性注入 ${}
+            PreparedStatement 对值进行站位 可以方式sql的恶性注入 #{} 以后用这个
+
+
+        -->
+        <where>
+
+            <if test="name!=null and name!=''">
+
+                a.name like '%' #{name} '%'
+
+            </if>
+
+            <if test="owner!=null and owner!=''">
+
+                and u.name like '%' #{owner} '%'
+
+            </if>
+
+            <if test="startDate!=null and startDate!=''">
+
+                and a.startDate &gt; #{startDate}
+
+            </if>
+
+            <if test="endDate!=null and endDate!=''">
+
+                and a.endDate &lt; #{endDate}
+
+            </if>
+
+        </where>
+
+        order by a.createTime desc
+
+        limit #{skipCount},#{pageSize}
+
+    </select>
+
+    <insert id="saveActivity">
+
+        insert into tbl_activity(
+
+            id,
+            owner,
+            name,
+            startDate,
+            endDate,
+            cost,
+            description,
+            createTime,
+            createBy
+
+
+        )
+
+        values(
+
+            #{id},
+            #{owner},
+            #{name},
+            #{startDate},
+            #{endDate},
+            #{cost},
+            #{description},
+            #{createTime},
+            #{createBy}
+
+        )
+
+
+    </insert>
+
+    <insert id="saveActivity1">
+
+        insert into tbl_activity(
+
+            id,
+            owner,
+            name,
+            startDate,
+            endDate,
+            cost,
+            description,
+            createTime,
+            createBy
+
+
+        )
+
+        values(
+
+            #{id},
+            #{owner},
+            #{name},
+            #{startDate},
+            #{endDate},
+            #{cost},
+            #{description},
+            #{createTime},
+            #{createBy}
+
+        )
+
+
+    </insert>
+
+</mapper>
