@@ -17,6 +17,8 @@ public class Activity {
     private String editTime;    //  修改时间
     private String editBy;  //      修改人
 
+    private int age;
+
 
     public String getId() {
         return id;
