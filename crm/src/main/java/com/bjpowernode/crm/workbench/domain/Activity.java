@@ -19,7 +19,7 @@ public class Activity {
 
     private int age;
     private String phone;
-    private String bran1;
+    private String bran3;
 
 
     public String getId() {
