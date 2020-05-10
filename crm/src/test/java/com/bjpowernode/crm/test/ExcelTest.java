@@ -1,3 +1,4 @@
+/*
 package com.bjpowernode.crm.test;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -9,10 +10,12 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+*/
 /**
  * 动力节点
  * 2019/11/25
- */
+ *//*
+
 public class ExcelTest {
 
     public static void main(String[] args) {
@@ -34,23 +37,27 @@ public class ExcelTest {
         HSSFSheet sheet = workbook.createSheet();
 
         //通过页，创建一行
-        /*
+        */
+/*
 
             行的创建要通过下标来指定是哪一行
             下标是通过从0开始的计数
             如下案例所示createRow(0)，表示创建的是第一行
 
-         */
+         *//*
+
         HSSFRow row = sheet.createRow(0);
 
         //通过行，来创建行中的单元格
-        /*
+        */
+/*
 
             单元格也是要共工作下标来指定是哪一格
             下标是通过从0开始的计数
             如下案例所示createCell(0)，表示是在当前行中创建的第一个单元格
 
-         */
+         *//*
+
         HSSFCell cell = row.createCell(0);
         cell.setCellValue("id");
 
@@ -149,3 +156,4 @@ public class ExcelTest {
 
 
 
+*/

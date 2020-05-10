@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
         }
 
         //验证ip地址
-        String allowIps = user.getAllowIps();
+/*        String allowIps = user.getAllowIps();
         if(allowIps!=null){
 
             if(!allowIps.contains(ip)){
@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
 
             }
 
-        }
+        }*/
 
 
         /*

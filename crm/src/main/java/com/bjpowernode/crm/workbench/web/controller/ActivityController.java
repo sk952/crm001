@@ -10,10 +10,6 @@ import com.bjpowernode.crm.vo.PaginationVo;
 import com.bjpowernode.crm.workbench.domain.Activity;
 import com.bjpowernode.crm.workbench.domain.ActivityRemark;
 import com.bjpowernode.crm.workbench.service.ActivityService;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -192,7 +188,7 @@ public class ActivityController {
 
 
 //    导出按钮的查询操作
-    @RequestMapping("/exportActivityAll.do")
+   /* @RequestMapping("/exportActivityAll.do")
     public void exportActivityAll(HttpServletResponse response){
         //通过业务层查询市场活动的所有记录
         List<Activity> aList=activityService.getActivityList();
@@ -300,12 +296,12 @@ public class ActivityController {
         response.setContentType("octets/stream");
         response.setHeader("Content-Disposition","attachment;filename=Activity-"+DateTimeUtil.getSysTime()+".xls");
 
-        /*
+        *//*
 
             通过response得到的响应流，如果我们自己没有关闭掉
             tomcat服务器会自动帮我们关闭掉
 
-         */
+         *//*
 
         OutputStream out= null;
         try {
@@ -533,7 +529,7 @@ public class ActivityController {
 
 
     }
-
+*/
 
 
 
