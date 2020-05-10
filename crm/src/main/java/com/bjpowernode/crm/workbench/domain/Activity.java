@@ -18,6 +18,8 @@ public class Activity {
     private String editBy;  //      修改人
 
     private int age;
+    private String phone;
+    private String bran1;
 
 
     public String getId() {
